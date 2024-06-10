@@ -28,8 +28,8 @@ export default function Header() {
           MozAppearance: "none",
         }}
       >
-        <option value="English">🇬🇧 English</option>
         <option value="Português">🇧🇷 Português</option>
+        <option value="English">🇬🇧 English</option>
       </select>
     </header>
   );

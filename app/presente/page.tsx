@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import Header from "./_components/Header";
+import Header from "../_components/Header";
 
 export default function Home() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -19,79 +19,21 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex flex-col items-center justify-center gap-4 pt-72">
-        <h1 className="max-w-4xl text-center text-6xl font-bold">
-          A maior biblioteca do mundo na palma da sua mão
-        </h1>
-        <a
-          className="rounded-md bg-amber-500 px-24 py-4 text-4xl text-white"
-          href="#signin"
-        >
-          Vamos lá
-        </a>
-        <p>
-          Já tenho cadastro.{" "}
-          <a className="font-bold" href="#login">
-            Entrar
-          </a>
-        </p>
-      </main>
-      <section
-        id="features"
-        className="flex flex-col items-center justify-center pt-80"
-      >
-        <h1 className="text-3xl font-bold">
-          Venha ter uma nova experiência com os seus livros favoritos
-        </h1>
-        <div className="mt-16 grid grid-cols-3 gap-16 text-xl">
-          <div className="flex flex-col items-center gap-2">
-            <Image
-              src="https://placehold.co/300/png"
-              alt="Dispositivos"
-              width={200}
-              height={200}
-            />
-            <p>Acesse onde e quando quiser</p>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <Image
-              src="https://placehold.co/300/png"
-              alt="Dispositivos"
-              width={200}
-              height={200}
-            />
-            <p>Escute um trecho desse livro</p>
-            <button className="rounded-lg bg-black px-6 py-2 text-white">
-              Play
-            </button>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <Image
-              src="https://placehold.co/300/png"
-              alt="Dispositivos"
-              width={200}
-              height={200}
-            />
-            <p>
-              +200.000 eBooks <br />
-              +100.000 Audiobooks
-            </p>
-          </div>
-        </div>
-      </section>
       <section
         id="plans"
-        className="flex flex-col items-center justify-center py-80"
+        className="flex flex-col items-center justify-center py-32"
       >
         <h1 className="text-3xl font-bold">
-          Tenha uma experiência ainda melhor com o nosso plano{" "}
-          <span className="text-amber-500">PREMIUM</span>
+          Seja bem-vindo ao InBook!
         </h1>
+        <p className="mt-4 text-center">
+          Parabéns! Você ganhou 30 dias gratuitos do nosso plano <span className="text-amber-500 font-bold">PREMIUM</span>
+        </p>
         <div className="mt-16 flex justify-center gap-8">
           <div className="w-2/5 rounded-xl border-2 border-slate-200 p-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Free</h2>
-              <p>R$0,00</p>
+              <h2 className="text-2xl font-bold">Gratuito</h2>
+              <p>R$ 0,00</p>
             </div>
             <ul className="mt-4 list-inside list-disc marker:text-slate-400">
               <li>Acesso ilimitado aos eBooks e audiobooks</li>
@@ -101,7 +43,7 @@ export default function Home() {
           <div className="w-2/5 rounded-xl border-2 border-amber-500 p-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-amber-500">PREMIUM</h2>
-              <p>R$39.90/mês</p>
+              <p>R$ 39,90/mês</p>
             </div>
             <ul className="mt-4 list-inside list-disc marker:text-amber-500">
               <li>Acesso ilimitado aos eBooks e audiobooks</li>
