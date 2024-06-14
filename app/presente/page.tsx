@@ -2,15 +2,15 @@ import Header from "../_components/Header";
 import SignInButton from "../_components/SignInButton";
 import PlanCard from "../_components/PlanCard";
 
-export default function Home() {
+export default function Presente() {
   return (
-    <>
+    <div className="dark dark:text-zinc-200">
       <Header nav={false} />
       <section id="plans" className="flex flex-col items-center justify-center py-32">
-        <h1 className="text-3xl font-bold">Seja bem-vindo ao InBook!</h1>
-        <p className="mt-4 text-center">
+        <h1 className="text-5xl font-bold ">Seja bem-vindo ao InBook!</h1>
+        <p className="text-lg mt-4 text-center">
           Parabéns! Você ganhou 30 dias gratuitos do nosso plano{" "}
-          <span className="font-bold text-amber-500">PREMIUM</span>
+          <span className="font-bold text-secundariaClaro">PREMIUM</span>
         </p>
         <div className="mt-8 flex flex-col items-center gap-8">
           <div className="flex justify-center gap-8">
@@ -20,6 +20,6 @@ export default function Home() {
           <SignInButton size="small" />
         </div>
       </section>
-    </>
+    </div>
   );
 }

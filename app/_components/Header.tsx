@@ -6,30 +6,28 @@ interface IHeaderProps {
 
 export default function Header(props: IHeaderProps) {
   return (
-    <header className="flex items-center justify-between p-4">
-      <h1 className="text-3xl font-bold">
-        <a href="/">InBook</a>
-      </h1>
+    <header className="flex items-center justify-between p-4 dark:text-zinc-200">
+      <a href="/" className="text-3xl font-bold">InBook</a>
       {/* <Image src="/logo.svg" alt="Logo" width={200} height={200} /> */}
-      {props.nav === true ? (
+      {props.nav && (
         <nav>
-          <ul className="flex justify-between gap-20">
-            <li className="hover:underline">
-              <a href="#features">Experiências</a>
+          <ul className="flex justify-between gap-8">
+            <li>
+              <a className="hover:underline" href="#features">Experiências</a>
             </li>
-            <li className="hover:underline">
-              <a href="#plans">Planos</a>
+            <li>
+              <a className="hover:underline" href="#plans">Planos</a>
             </li>
-            <li className="hover:underline">
-              <a href="#about">Sobre</a>
+            <li>
+              <a className="hover:underline" href="#about">Sobre</a>
             </li>
           </ul>
         </nav>
-      ) : null}
+      )}
       <select
         name="languages"
         id="lang"
-        className="rounded-md border-2 border-slate-100 bg-white p-2 focus:outline-none"
+        className="rounded-md border-2 border-gray-300 bg-primariaClaro dark:bg-primariaEscuro p-2 focus:outline-none"
         style={{
           appearance: "none",
           WebkitAppearance: "none",

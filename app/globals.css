@@ -2,8 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  width: 100%;
-  max-width: 1024px;
-  margin: 0 auto;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  html {
+    height: 100%;
+  }
+
+  body {
+    width: 100%;
+    max-width: 1024px;
+    margin: 0 auto;
+    height: 100%;
+    background-color: #ECEBE9;
+    /* background-color: #232323; */
+  }
 }
