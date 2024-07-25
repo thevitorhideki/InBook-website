@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@/components/theme-provider';
 import '@/globals.css';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
@@ -8,7 +7,7 @@ const fontSans = FontSans({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
   title: 'InBook',
-  description: 'Um streaming para os amantes de livros.',
+  description: 'Um streaming para todos os tipos de leitores',
 };
 
 export default function RootLayout({
@@ -17,13 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="pt-br" suppressHydrationWarning>
       <body
         className={cn('min-h-screen font-sans antialiased', fontSans.variable)}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );
