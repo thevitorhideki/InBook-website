@@ -81,6 +81,9 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
         caret_blink: 'caret-blink 1.25s ease-out infinite',
       },
+      gridTemplateColumns: {
+        'min-content-auto': 'min-content auto',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

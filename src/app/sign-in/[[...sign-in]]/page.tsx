@@ -107,6 +107,8 @@ export default function Page() {
     },
   });
 
+  if (!signIn) return null;
+
   const handleSubmit = async ({
     emailAddress,
   }: z.infer<typeof userDataSchema>) => {
@@ -235,10 +237,10 @@ export default function Page() {
     } catch (error) {}
   }
 
-  const signInWithGoogle = async () => {
-    return signIn?.authenticateWithRedirect({
+  const signInWithGoogle = () => {
+    return signIn.authenticateWithRedirect({
       strategy: 'oauth_google',
-      redirectUrl: '/sso-callback',
+      redirectUrl: '/sign-in/sso-callback',
       redirectUrlComplete: '/home',
     });
   };

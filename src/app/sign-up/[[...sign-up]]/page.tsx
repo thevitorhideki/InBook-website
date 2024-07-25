@@ -72,6 +72,8 @@ export default function Page() {
     },
   });
 
+  if (!signUp) return null;
+
   const handleSubmit = async ({
     username,
     emailAddress,
@@ -125,10 +127,10 @@ export default function Page() {
     }
   };
 
-  const signUpWithGoogle = async () => {
-    return signUp?.authenticateWithRedirect({
+  const signUpWithGoogle = () => {
+    return signUp.authenticateWithRedirect({
       strategy: 'oauth_google',
-      redirectUrl: '/sso-callback',
+      redirectUrl: '/sign-up/sso-callback',
       redirectUrlComplete: '/home',
     });
   };
