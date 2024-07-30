@@ -6,6 +6,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -126,7 +127,6 @@ export default function Page() {
       setSupportedStrategies(
         supportedFirstFactors.map((factor) => factor.strategy),
       );
-      console.log(supportedFirstFactors);
 
       const isPasswordFactor = (
         factor: SignInFirstFactor,
@@ -265,92 +265,174 @@ export default function Page() {
           <Link href="/sign-up">Criar conta</Link>
         </Button>
 
-        {(verifying && selectedStrategy === 'password' && (
-          <Form {...passwordVerificationForm}>
-            <div className="mx-auto flex w-full flex-col justify-center sm:w-[350px]">
+        {!verifying ? (
+          <Form {...signInForm}>
+            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
               <div className="text-center">
-                <h1 className="text-2xl font-semibold">Digite sua senha</h1>
+                <h1 className="text-2xl font-semibold">Bem vindo de volta!</h1>
                 <p className="text-sm text-muted-foreground">
-                  Digite a senha associada a sua conta
+                  Escreva o seu email entrar
                 </p>
-                <div className="flex items-center justify-center gap-2">
-                  <p className="text-sm text-muted-foreground">{email}</p>
-                  <PenLine
-                    className="h-4 w-4 text-orange-500"
-                    onClick={() => setVerifying(false)}
-                  />
+              </div>
+
+              <Button
+                onClick={signInWithGoogle}
+                variant={'outline'}
+                className="gap-2"
+              >
+                <Image
+                  src="/assets/google.png"
+                  width={16}
+                  height={16}
+                  alt="Google"
+                />
+                Continuar com o Google
+              </Button>
+
+              <div className="relative flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t"></span>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    ou continue com
+                  </span>
                 </div>
               </div>
 
               <form
-                onSubmit={passwordVerificationForm.handleSubmit(
-                  handlePasswordVerification,
-                )}
-                className="mt-4 grid"
+                onSubmit={signInForm.handleSubmit(handleSubmit)}
+                className="grid"
               >
-                <FormField
-                  control={passwordVerificationForm.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <>
-                          <div className="relative flex items-center">
+                <div className="grid gap-3">
+                  <FormField
+                    control={signInForm.control}
+                    name="emailAddress"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <>
                             <Input
-                              className="pr-8"
-                              placeholder="Senha"
-                              type={showPassword ? 'text' : 'password'}
+                              placeholder="exemplo@email.com"
+                              autoCapitalize="none"
+                              autoComplete="email"
+                              autoCorrect="off"
                               required
-                              disabled={isSigningIn}
                               {...field}
                             />
-                            <div className="absolute right-3">
-                              {showPassword ? (
-                                <EyeOff
-                                  className="h-4 w-4"
-                                  onClick={() => setShowPassword(false)}
-                                />
-                              ) : (
-                                <Eye
-                                  className="h-4 w-4"
-                                  onClick={() => setShowPassword(true)}
-                                />
-                              )}
-                            </div>
-                          </div>
+                            {errors !== undefined && (
+                              <div className="flex items-center gap-2 font-medium text-destructive">
+                                <TriangleAlert className="h-4 w-4" />
+                                <p className="text-sm font-medium text-destructive">
+                                  Informações de login incorretas
+                                </p>
+                              </div>
+                            )}
+                          </>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-                          {errors !== undefined && (
-                            <div className="flex items-center gap-2 font-medium text-destructive">
-                              <TriangleAlert className="h-4 w-4" />
-                              <p className="text-sm font-medium text-destructive">
-                                Senha Incorreta
-                              </p>
-                            </div>
-                          )}
-                        </>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <Button className="mt-4" type="submit" disabled={isSigningIn}>
                   {isSigningIn && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
-                  Entrar
+                  Continuar
                 </Button>
               </form>
-              <Button
-                variant={'link'}
-                onClick={() => {
-                  setSelectedStrategy(null);
-                }}
-              >
-                Outro método de login
-              </Button>
             </div>
           </Form>
-        )) ||
+        ) : (
+          (verifying && selectedStrategy === 'password' && (
+            <Form {...passwordVerificationForm}>
+              <div className="mx-auto flex w-full flex-col justify-center sm:w-[350px]">
+                <div className="text-center">
+                  <h1 className="text-2xl font-semibold">Digite sua senha</h1>
+                  <p className="text-sm text-muted-foreground">
+                    Digite a senha associada a sua conta
+                  </p>
+                  <div className="flex items-center justify-center gap-2">
+                    <p className="text-sm text-muted-foreground">{email}</p>
+                    <PenLine
+                      className="h-4 w-4 text-orange-500"
+                      onClick={() => setVerifying(false)}
+                    />
+                  </div>
+                </div>
+
+                <form
+                  onSubmit={passwordVerificationForm.handleSubmit(
+                    handlePasswordVerification,
+                  )}
+                  className="mt-4 grid"
+                >
+                  <FormField
+                    control={passwordVerificationForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <>
+                            <div className="relative flex items-center">
+                              <Input
+                                className="pr-8"
+                                placeholder="Senha"
+                                type={showPassword ? 'text' : 'password'}
+                                required
+                                disabled={isSigningIn}
+                                {...field}
+                              />
+                              <div className="absolute right-3">
+                                {showPassword ? (
+                                  <EyeOff
+                                    className="h-4 w-4"
+                                    onClick={() => setShowPassword(false)}
+                                  />
+                                ) : (
+                                  <Eye
+                                    className="h-4 w-4"
+                                    onClick={() => setShowPassword(true)}
+                                  />
+                                )}
+                              </div>
+                            </div>
+
+                            {errors !== undefined && (
+                              <div className="flex items-center gap-2 font-medium text-destructive">
+                                <TriangleAlert className="h-4 w-4" />
+                                <p className="text-sm font-medium text-destructive">
+                                  Senha Incorreta
+                                </p>
+                              </div>
+                            )}
+                          </>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button className="mt-4" type="submit" disabled={isSigningIn}>
+                    {isSigningIn && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Entrar
+                  </Button>
+                </form>
+                <Button
+                  variant={'link'}
+                  onClick={() => {
+                    setSelectedStrategy(null);
+                  }}
+                >
+                  Outro método de login
+                </Button>
+              </div>
+            </Form>
+          )) ||
           (verifying && selectedStrategy === 'email_code' && (
             <Form {...otpVerificationForm}>
               <div className="mx-auto flex w-full flex-col justify-center sm:w-[350px]">
@@ -473,87 +555,7 @@ export default function Page() {
                 )}
               </div>
             </div>
-          ))}
-        {!verifying && (
-          <Form {...signInForm}>
-            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-              <div className="text-center">
-                <h1 className="text-2xl font-semibold">Bem vindo de volta!</h1>
-                <p className="text-sm text-muted-foreground">
-                  Escreva o seu email entrar
-                </p>
-              </div>
-
-              <Button
-                onClick={signInWithGoogle}
-                variant={'outline'}
-                className="gap-2"
-              >
-                <Image
-                  src="/assets/google.png"
-                  width={16}
-                  height={16}
-                  alt="Google"
-                />
-                Continuar com o Google
-              </Button>
-
-              <div className="relative flex items-center justify-center">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t"></span>
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    ou continue com
-                  </span>
-                </div>
-              </div>
-
-              <form
-                onSubmit={signInForm.handleSubmit(handleSubmit)}
-                className="grid"
-              >
-                <div className="grid gap-3">
-                  <FormField
-                    control={signInForm.control}
-                    name="emailAddress"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <>
-                            <Input
-                              placeholder="nome@exemplo.com"
-                              autoCapitalize="none"
-                              autoComplete="email"
-                              autoCorrect="off"
-                              required
-                              {...field}
-                            />
-                            {errors !== undefined && (
-                              <div className="flex items-center gap-2 font-medium text-destructive">
-                                <TriangleAlert className="h-4 w-4" />
-                                <p className="text-sm font-medium text-destructive">
-                                  Informações de login incorretas
-                                </p>
-                              </div>
-                            )}
-                          </>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <Button className="mt-4" type="submit" disabled={isSigningIn}>
-                  {isSigningIn && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  Continuar
-                </Button>
-              </form>
-            </div>
-          </Form>
+          ))
         )}
       </div>
     </div>

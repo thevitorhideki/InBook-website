@@ -1,5 +1,9 @@
-import { SignOutButton } from '@clerk/nextjs';
+import { SignedIn, SignOutButton } from '@clerk/nextjs';
 
 export default function Index() {
-  return <SignOutButton redirectUrl="/" />;
+  return (
+    <SignedIn>
+      <SignOutButton redirectUrl="/" />
+    </SignedIn>
+  );
 }

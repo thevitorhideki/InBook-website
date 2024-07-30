@@ -35,26 +35,45 @@ const VerificationSchema = z.object({
   }),
 });
 
-const UserDataSchema = z.object({
-  username: z
-    .string()
-    .min(6, {
-      message: 'Seu username deve conter no mínimo 6 caracteres',
-    })
-    .max(20, { message: 'Seu username deve conter no máximo 20 caracteres' }),
+const EmailSchema = z.object({
   emailAddress: z.string().email({ message: 'Email invalido' }),
+});
+
+const ProfileSchema = z.object({
+  firstName: z.string({ message: 'Seu primeiro nome não pode estar vazio' }),
+  lastName: z.string({ message: 'Seu sobrenome não pode estar vazio' }),
+  username: z.string({ message: 'Seu username não pode estar vazio' }).min(6, {
+    message: 'Seu username deve conter no mínimo 6 caracteres',
+  }),
+});
+
+const PasswordSchema = z.object({
   password: z.string().min(8, {
     message: 'Sua senha deve conter no mínimo 8 caracteres',
   }),
 });
 
+enum FormSteps {
+  'EMAIL' = 'email',
+  'PROFILE' = 'profile',
+  'PASSWORD' = 'password',
+  'VERIFYING' = 'verifying',
+}
+
 export default function Page() {
   const { isLoaded, signUp, setActive } = useSignUp();
-  const [verifying, setVerifying] = useState(false);
+  const [steps, setSteps] = useState(FormSteps.EMAIL);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<ClerkAPIError[]>();
   const router = useRouter();
+
+  const emailForm = useForm<z.infer<typeof EmailSchema>>({
+    resolver: zodResolver(EmailSchema),
+    defaultValues: {
+      emailAddress: '',
+    },
+  });
 
   const verificationForm = useForm<z.infer<typeof VerificationSchema>>({
     resolver: zodResolver(VerificationSchema),
@@ -63,22 +82,27 @@ export default function Page() {
     },
   });
 
-  const createUserForm = useForm<z.infer<typeof UserDataSchema>>({
-    resolver: zodResolver(UserDataSchema),
+  const profileForm = useForm<z.infer<typeof ProfileSchema>>({
+    resolver: zodResolver(ProfileSchema),
     defaultValues: {
+      firstName: '',
+      lastName: '',
       username: '',
-      emailAddress: '',
+    },
+  });
+
+  const passwordForm = useForm<z.infer<typeof PasswordSchema>>({
+    resolver: zodResolver(PasswordSchema),
+    defaultValues: {
       password: '',
     },
   });
 
   if (!signUp) return null;
 
-  const handleSubmit = async ({
-    username,
+  const handleEmailAddress = async ({
     emailAddress,
-    password,
-  }: z.infer<typeof UserDataSchema>) => {
+  }: z.infer<typeof EmailSchema>) => {
     setErrors(undefined);
 
     if (!isLoaded) return;
@@ -86,18 +110,58 @@ export default function Page() {
     try {
       setIsSigningUp(true);
 
-      await signUp.create({
-        username,
-        emailAddress,
-        password,
-      });
+      await signUp.create({ emailAddress });
 
-      await signUp.prepareEmailAddressVerification({
-        strategy: 'email_code',
-      });
-
-      setVerifying(true);
+      setSteps(FormSteps.PROFILE);
     } catch (error: any) {
+      if (isClerkAPIResponseError(error)) setErrors(error.errors);
+      console.error(JSON.stringify(error, null, 2));
+    } finally {
+      setIsSigningUp(false);
+    }
+  };
+
+  const handleProfile = async ({
+    firstName,
+    lastName,
+    username,
+  }: z.infer<typeof ProfileSchema>) => {
+    setErrors(undefined);
+
+    try {
+      setIsSigningUp(true);
+
+      await signUp.update({
+        firstName,
+        lastName,
+        username,
+      });
+
+      setSteps(FormSteps.PASSWORD);
+    } catch (error) {
+      if (isClerkAPIResponseError(error)) setErrors(error.errors);
+      console.error(JSON.stringify(error, null, 2));
+    } finally {
+      setIsSigningUp(false);
+    }
+  };
+
+  const handlePassword = async ({
+    password,
+  }: z.infer<typeof PasswordSchema>) => {
+    setErrors(undefined);
+
+    if (!isLoaded) return;
+
+    try {
+      setIsSigningUp(true);
+
+      await signUp.update({ password });
+
+      await signUp.prepareEmailAddressVerification();
+
+      setSteps(FormSteps.VERIFYING);
+    } catch (error) {
       if (isClerkAPIResponseError(error)) setErrors(error.errors);
       console.error(JSON.stringify(error, null, 2));
     } finally {
@@ -153,135 +217,56 @@ export default function Page() {
         <Button className="absolute right-10 top-10" variant={'ghost'} asChild>
           <Link href="/sign-in">Login</Link>
         </Button>
-        {verifying ? (
-          <Form {...verificationForm}>
-            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-              <form
-                onSubmit={verificationForm.handleSubmit(handleVerification)}
-                className="grid"
-              >
-                <FormField
-                  control={verificationForm.control}
-                  name="code"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Código de verificação</FormLabel>
-                      <FormControl>
-                        <InputOTP
-                          maxLength={6}
-                          pattern={REGEXP_ONLY_DIGITS}
-                          {...field}
-                        >
-                          <InputOTPGroup>
-                            <InputOTPSlot index={0} />
-                            <InputOTPSlot index={1} />
-                            <InputOTPSlot index={2} />
-                            <InputOTPSlot index={3} />
-                            <InputOTPSlot index={4} />
-                            <InputOTPSlot index={5} />
-                          </InputOTPGroup>
-                        </InputOTP>
-                      </FormControl>
-                      <FormDescription>
-                        Por favor, digite o código de verificação enviado ao seu
-                        email
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button className="mt-4" type="submit" disabled={isSigningUp}>
-                  {isSigningUp && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  Criar conta
-                </Button>
-              </form>
+
+        {steps === FormSteps.EMAIL && (
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div className="text-center">
+              <h1 className="text-2xl font-semibold">Crie uma conta</h1>
+              <p className="text-sm text-muted-foreground">
+                Escreva o seu melhor email para continuar
+              </p>
             </div>
-          </Form>
-        ) : (
-          <Form {...createUserForm}>
-            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-              <div className="text-center">
-                <h1 className="text-2xl font-semibold">Crie uma conta</h1>
-                <p className="text-sm text-muted-foreground">
-                  Escreva um username, seu melhor email e uma senha para criar
-                  uma conta
-                </p>
+
+            <Button
+              onClick={signUpWithGoogle}
+              variant={'outline'}
+              className="gap-2"
+            >
+              <Image
+                src="/assets/google.png"
+                width={16}
+                height={16}
+                alt="Google"
+              />
+              Continuar com o Google
+            </Button>
+
+            <div className="relative flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t"></span>
               </div>
-
-              <Button
-                onClick={signUpWithGoogle}
-                variant={'outline'}
-                className="gap-2"
-              >
-                <Image
-                  src="/assets/google.png"
-                  width={16}
-                  height={16}
-                  alt="Google"
-                />
-                Continuar com o Google
-              </Button>
-
-              <div className="relative flex items-center justify-center">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t"></span>
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    ou continue com
-                  </span>
-                </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  ou continue com
+                </span>
               </div>
-
+            </div>
+            <Form {...emailForm}>
               <form
-                onSubmit={createUserForm.handleSubmit(handleSubmit)}
                 className="grid"
+                onSubmit={emailForm.handleSubmit(handleEmailAddress)}
               >
                 <div className="grid gap-3">
                   <FormField
-                    control={createUserForm.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <>
-                            <Input
-                              placeholder="Username"
-                              autoCapitalize="none"
-                              autoComplete="username"
-                              autoCorrect="off"
-                              required
-                              disabled={isSigningUp}
-                              {...field}
-                            />
-                            {errors !== undefined &&
-                              errors.filter(
-                                (err) => err.meta?.paramName === 'username',
-                              ).length !== 0 && (
-                                <div className="flex items-center gap-2 font-medium text-destructive">
-                                  <TriangleAlert className="h-4 w-4" />
-                                  <p className="text-sm font-medium text-destructive">
-                                    Esse username já está em uso
-                                  </p>
-                                </div>
-                              )}
-                          </>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createUserForm.control}
+                    control={emailForm.control}
                     name="emailAddress"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>Email</FormLabel>
                         <FormControl>
                           <>
                             <Input
-                              placeholder="Email"
+                              placeholder="exemplo@email.com"
                               type="email"
                               autoCapitalize="none"
                               autoComplete="email"
@@ -295,10 +280,18 @@ export default function Page() {
                                 (err) =>
                                   err.meta?.paramName === 'email_address',
                               ).length !== 0 && (
-                                <div className="flex items-center gap-2 font-medium text-destructive">
+                                <div className="grid grid-cols-min-content-auto items-center gap-2 font-medium text-destructive">
                                   <TriangleAlert className="h-4 w-4" />
                                   <p className="text-sm font-medium text-destructive">
-                                    Esse email já está em uso
+                                    Esse email já está em uso, vá para a página
+                                    de{' '}
+                                    <Link
+                                      className="font-semibold underline"
+                                      href={'/sign-in'}
+                                    >
+                                      Login
+                                    </Link>{' '}
+                                    para continuar.
                                   </p>
                                 </div>
                               )}
@@ -308,8 +301,140 @@ export default function Page() {
                       </FormItem>
                     )}
                   />
+                </div>
+                <Button className="mt-4" type="submit" disabled={isSigningUp}>
+                  {isSigningUp && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Continuar
+                </Button>
+              </form>
+            </Form>
+          </div>
+        )}
+
+        {steps === FormSteps.PROFILE && (
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div className="text-center">
+              <h1 className="text-2xl font-semibold">Crie o seu perfil</h1>
+              <p className="text-sm text-muted-foreground">
+                Preencha essas informações para ter uma experiência
+                personalizada
+              </p>
+            </div>
+
+            <Form {...profileForm}>
+              <form
+                className="grid"
+                onSubmit={profileForm.handleSubmit(handleProfile)}
+              >
+                <div className="grid gap-3">
+                  <div className="flex gap-3">
+                    <FormField
+                      control={profileForm.control}
+                      name="firstName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Primeiro nome</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="João"
+                              type="text"
+                              autoComplete="name"
+                              autoCorrect="off"
+                              required
+                              disabled={isSigningUp}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={profileForm.control}
+                      name="lastName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Sobrenome</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Silva"
+                              type="text"
+                              autoComplete="family-name"
+                              autoCorrect="off"
+                              required
+                              disabled={isSigningUp}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <FormField
+                      control={profileForm.control}
+                      name="username"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Usuário</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="joaosilva"
+                              type="text"
+                              autoComplete="username"
+                              autoCorrect="off"
+                              required
+                              disabled={isSigningUp}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Essa informação ficará visível para outros usuários
+                          </FormDescription>
+                          <FormMessage />
+                          {errors !== undefined && (
+                            <div className="flex items-center gap-2 font-medium text-destructive">
+                              <TriangleAlert className="h-4 w-4" />
+                              <p className="text-sm font-medium text-destructive">
+                                Esse nome de usuário já está em uso
+                              </p>
+                            </div>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                <Button className="mt-4" type="submit" disabled={isSigningUp}>
+                  {isSigningUp && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Continuar
+                </Button>
+              </form>
+            </Form>
+          </div>
+        )}
+
+        {steps === FormSteps.PASSWORD && (
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div className="text-center">
+              <h1 className="text-2xl font-semibold">Senha</h1>
+              <p className="text-sm text-muted-foreground">
+                Crie uma senha forte para proteger a sua conta
+              </p>
+            </div>
+            <Form {...passwordForm}>
+              <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+                <form
+                  onSubmit={passwordForm.handleSubmit(handlePassword)}
+                  className="grid"
+                >
                   <FormField
-                    control={createUserForm.control}
+                    control={passwordForm.control}
                     name="password"
                     render={({ field }) => (
                       <FormItem>
@@ -318,7 +443,7 @@ export default function Page() {
                             <div className="relative flex items-center">
                               <Input
                                 className="pr-8"
-                                placeholder="Senha"
+                                placeholder="#SenhaForte123"
                                 type={showPassword ? 'text' : 'password'}
                                 required
                                 disabled={isSigningUp}
@@ -339,25 +464,88 @@ export default function Page() {
                               </div>
                             </div>
 
-                            {errors !== undefined &&
-                              errors.filter(
-                                (err) => err.meta?.paramName === 'password',
-                              ).length !== 0 && (
-                                <div className="flex items-center gap-2 font-medium text-destructive">
-                                  <TriangleAlert className="h-4 w-4" />
-                                  <p className="text-sm font-medium text-destructive">
-                                    Para sua segurança, utilize uma senha mais
-                                    forte
-                                  </p>
-                                </div>
-                              )}
+                            {errors !== undefined && (
+                              <div className="flex items-center gap-2 font-medium text-destructive">
+                                <TriangleAlert className="h-4 w-4" />
+                                <p className="text-sm font-medium text-destructive">
+                                  Senha Incorreta
+                                </p>
+                              </div>
+                            )}
                           </>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                </div>
+                  <Button className="mt-4" type="submit" disabled={isSigningUp}>
+                    {isSigningUp && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Continuar
+                  </Button>
+                </form>
+              </div>
+            </Form>
+          </div>
+        )}
+
+        {steps === FormSteps.VERIFYING && (
+          <Form {...verificationForm}>
+            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+              <div className="text-center">
+                <h1 className="text-2xl font-semibold">Verificação</h1>
+                <p className="text-sm text-muted-foreground">
+                  Verifique o seu email para confirmar a sua conta
+                </p>
+              </div>
+              <form
+                onSubmit={verificationForm.handleSubmit(handleVerification)}
+                className="grid"
+              >
+                <FormField
+                  control={verificationForm.control}
+                  name="code"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Código de verificação</FormLabel>
+                      <FormControl>
+                        <InputOTP
+                          maxLength={6}
+                          pattern={REGEXP_ONLY_DIGITS}
+                          {...field}
+                        >
+                          <div className="grid gap-2">
+                            <InputOTPGroup>
+                              <InputOTPSlot index={0} />
+                              <InputOTPSlot index={1} />
+                              <InputOTPSlot index={2} />
+                              <InputOTPSlot index={3} />
+                              <InputOTPSlot index={4} />
+                              <InputOTPSlot index={5} />
+                            </InputOTPGroup>
+                            {errors !== undefined &&
+                              errors.filter(
+                                (err) => err.meta?.paramName === 'code',
+                              ).length !== 0 && (
+                                <div className="grid grid-cols-min-content-auto items-center gap-2 font-medium text-destructive">
+                                  <TriangleAlert className="h-4 w-4" />
+                                  <p className="text-sm font-medium text-destructive">
+                                    Código inválido
+                                  </p>
+                                </div>
+                              )}
+                          </div>
+                        </InputOTP>
+                      </FormControl>
+                      <FormDescription>
+                        Por favor, digite o código de verificação enviado ao seu
+                        email
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Button className="mt-4" type="submit" disabled={isSigningUp}>
                   {isSigningUp && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

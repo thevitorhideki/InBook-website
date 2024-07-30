@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { Check } from 'lucide-react';
+import Link from 'next/link';
 import { HTMLAttributes } from 'react';
 import { Button } from './button';
 
@@ -34,12 +35,12 @@ export function PricingCard({
           <p className="text-sm text-muted-foreground">Grátis para sempre</p>
         )}
       </div>
-      <Button variant={'outline'}>
-        {plan === 'Free' ? 'Começar' : 'Assinar'}
+      <Button variant={'outline'} asChild>
+        <Link href={'/sign-up'}>{plan === 'Free' ? 'Começar' : 'Assinar'}</Link>
       </Button>
       <ul className="flex flex-col gap-2">
         {features.map((feature) => (
-          <li className="grid-cols-min-content-auto grid gap-2" key={feature}>
+          <li className="grid grid-cols-min-content-auto gap-2" key={feature}>
             <Check
               className={clsx('inline-block h-6 w-6', {
                 'text-amber-500 dark:text-amber-600': plan === 'Premium',
