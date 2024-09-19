@@ -1,0 +1,42 @@
+h2 {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  color: #555;
+}
+
+h3 {
+  font-size: 1rem;
+}
+
+ul, ol {
+  margin-left: 20px;
+}
+
+ol li {
+  list-style-type: decimal;
+}
+
+li {
+  list-style-type: disc;
+}
+
+a {
+  color: violet;
+  text-decoration: underline;
+}
+
+blockquote {
+  padding: 1rem;
+  background-color: #18181b;
+  border-radius: 8px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem auto;
+}
+
+.highlight {
+  color: aqua;
+}
