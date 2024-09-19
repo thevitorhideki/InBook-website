@@ -18,19 +18,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={cn(
-            'min-h-screen font-sans antialiased',
-            fontSans.variable,
-          )}
-        >
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn('min-h-screen font-sans antialiased', fontSans.variable)}
+      >
+        <ClerkProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
           </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
