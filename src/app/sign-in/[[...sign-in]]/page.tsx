@@ -15,7 +15,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { useSignIn } from '@clerk/nextjs';
+import { useSignIn, useUser } from '@clerk/nextjs';
 import { isClerkAPIResponseError } from '@clerk/nextjs/errors';
 import {
   ClerkAPIError,
@@ -37,8 +37,8 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { redirect, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -70,6 +70,7 @@ type VerificationStrategies =
 
 export default function Page() {
   const { isLoaded, signIn, setActive } = useSignIn();
+  const { isSignedIn } = useUser();
 
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [verifying, setVerifying] = useState(false);
@@ -107,6 +108,12 @@ export default function Page() {
       password: '',
     },
   });
+
+  useEffect(() => {
+    if (isSignedIn) {
+      redirect('/home');
+    }
+  }, [isSignedIn]);
 
   if (!signIn) return null;
 

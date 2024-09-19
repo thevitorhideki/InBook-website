@@ -1,22 +1,8 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
-import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
-import { redirect, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import Header from '../components/ui/header';
 
 export default function Home() {
-  const { isSignedIn } = useUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (isSignedIn) {
-      redirect('/home');
-    }
-  }, [isSignedIn, router]);
-
   return (
     <div className="mx-auto flex h-screen max-w-screen-lg flex-col px-5">
       <Header />

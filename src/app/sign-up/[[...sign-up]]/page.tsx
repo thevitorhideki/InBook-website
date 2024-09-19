@@ -16,7 +16,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { useSignUp } from '@clerk/nextjs';
+import { useSignUp, useUser } from '@clerk/nextjs';
 import { isClerkAPIResponseError } from '@clerk/nextjs/errors';
 import { ClerkAPIError } from '@clerk/types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,8 +24,8 @@ import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { Eye, EyeOff, Loader2, TriangleAlert } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { redirect, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -62,6 +62,7 @@ enum FormSteps {
 
 export default function Page() {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const { isSignedIn } = useUser();
   const [steps, setSteps] = useState(FormSteps.EMAIL);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -97,6 +98,12 @@ export default function Page() {
       password: '',
     },
   });
+
+  useEffect(() => {
+    if (isSignedIn) {
+      redirect('/home');
+    }
+  }, [isSignedIn]);
 
   if (!signUp) return null;
 

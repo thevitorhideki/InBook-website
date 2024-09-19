@@ -1,12 +1,18 @@
 'use client';
 
+import clsx from 'clsx';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
 import '../../../public/books/book.css';
 
 export function Page({ contentHtml }: { contentHtml: string }) {
   const [page, setPage] = useState(1);
   const [chapter, setChapter] = useState('');
+  const { theme } = useTheme();
+
   const pages = contentHtml.split(/<h2>/).length - 1;
 
   const prevPage = () => {
@@ -38,15 +44,27 @@ export function Page({ contentHtml }: { contentHtml: string }) {
   }, [page, contentHtml]);
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-3 rounded-t-xl border-2 border-zinc-800 p-5">
-      <div dangerouslySetInnerHTML={{ __html: chapter }} />
+    <div className="flex flex-1 flex-col justify-between gap-5 rounded-t-xl border-t-2 border-zinc-800 p-5">
+      <div className="flex flex-col gap-3">
+        <ReactMarkdown rehypePlugins={[rehypeRaw]}>{chapter}</ReactMarkdown>
+      </div>
       <div className="mx-auto flex items-center gap-3">
         <div onClick={prevPage}>
-          <ChevronLeft size={24} color={page != 1 ? 'white' : 'gray'} />
+          <ChevronLeft
+            size={24}
+            className={clsx('text-zinc-800 dark:text-zinc-50', {
+              'text-zinc-500 dark:text-zinc-600': page === 1,
+            })}
+          />
         </div>
         <p>Página {page}</p>
         <div onClick={nextPage}>
-          <ChevronRight size={24} color={page != pages ? 'white' : 'gray'} />
+          <ChevronRight
+            size={24}
+            className={clsx('text-zinc-800 dark:text-zinc-50', {
+              'text-zinc-500 dark:text-zinc-600': page === pages,
+            })}
+          />
         </div>
       </div>
     </div>

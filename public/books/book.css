@@ -1,11 +1,12 @@
 h2 {
   margin-top: 1rem;
   font-size: 1.5rem;
-  color: #555;
+  font-weight: 600;
 }
 
 h3 {
-  font-size: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 
 ul, ol {
@@ -21,22 +22,31 @@ li {
 }
 
 a {
-  color: violet;
   text-decoration: underline;
+}
+
+img {
+  margin: 0 auto;
 }
 
 blockquote {
   padding: 1rem;
-  background-color: #18181b;
   border-radius: 8px;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  margin: 1rem auto;
+.dark a {
+  color: violet;
+  text-decoration: underline;
 }
 
-.highlight {
-  color: aqua;
+.dark blockquote {
+  background-color: #18181b;
+}
+
+.light a {
+  color: blueviolet;
+}
+
+.light blockquote {
+  border: 2px solid black;
 }

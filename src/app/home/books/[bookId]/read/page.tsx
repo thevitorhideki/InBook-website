@@ -1,6 +1,6 @@
+import { Header } from '@/components/books/header';
 import { Page } from '@/components/books/page';
 import fs from 'fs';
-import { X } from 'lucide-react';
 import path from 'path';
 import { remark } from 'remark';
 import html from 'remark-html';
@@ -30,13 +30,11 @@ export default async function ReadBook({
 
   return (
     <div className="flex h-screen flex-col">
-      <header className="flex items-center justify-between p-5">
-        <a href={`/home/books/${bookId}`}>
-          <X size={36} color="white" />
-        </a>
-        <p className="text-xl font-semibold">{book.title}</p>
-        <span className="h-[36px] w-[36px]"></span>
-      </header>
+      <Header
+        variant="secondary"
+        bookId={parseInt(bookId)}
+        title={book.title}
+      />
 
       <Page contentHtml={contentHtml} />
     </div>
