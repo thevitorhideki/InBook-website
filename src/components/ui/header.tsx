@@ -40,7 +40,7 @@ export default function Header() {
 
         <div className="flex flex-1 justify-center">
           <Button asChild variant={'outline'}>
-            <Link href="sign-up" className="flex items-center gap-1">
+            <Link href="sign-in" className="flex items-center gap-1">
               Entrar
               <ArrowRight className="h-4 w-4" />
             </Link>

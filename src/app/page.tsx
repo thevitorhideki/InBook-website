@@ -28,9 +28,9 @@ export default function Home() {
         <Button
           asChild
           size={'lg'}
-          className="bg-orange-400 hover:bg-orange-500"
+          className="bg-orange-400 hover:bg-orange-500 dark:text-zinc-50"
         >
-          <Link href="https://tally.so/r/mD1PMZ" className="text-xl">
+          <Link href="sign-up" className="text-xl">
             Vamos lá
           </Link>
         </Button>
