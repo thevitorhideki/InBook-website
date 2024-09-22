@@ -37,7 +37,7 @@ export default async function BookPage({
     <>
       <Header variant="primary" />
 
-      <div className="px-5">
+      <div className="px-5 pb-20">
         <div className="flex flex-col gap-3">
           <Image
             src={`/books/${book.slug}.jpg`}
