@@ -20,6 +20,7 @@ export function BookCollection() {
               key={book.id}
               id={book.id}
               title={book.title}
+              slug={book.slug}
               author={book.author}
             />
           ))}

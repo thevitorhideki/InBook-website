@@ -2,7 +2,6 @@
 
 import clsx from 'clsx';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
@@ -11,7 +10,6 @@ import '../../../public/books/book.css';
 export function Page({ contentHtml }: { contentHtml: string }) {
   const [page, setPage] = useState(1);
   const [chapter, setChapter] = useState('');
-  const { theme } = useTheme();
 
   const pages = contentHtml.split(/<h2>/).length - 1;
 
@@ -45,7 +43,7 @@ export function Page({ contentHtml }: { contentHtml: string }) {
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-5 rounded-t-xl border-t-2 border-zinc-800 p-5">
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 text-justify font-serif text-lg">
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>{chapter}</ReactMarkdown>
       </div>
       <div className="mx-auto flex items-center gap-3">
@@ -53,7 +51,7 @@ export function Page({ contentHtml }: { contentHtml: string }) {
           <ChevronLeft
             size={24}
             className={clsx('text-zinc-800 dark:text-zinc-50', {
-              'text-zinc-500 dark:text-zinc-600': page === 1,
+              'text-background dark:text-zinc-950': page === 1,
             })}
           />
         </div>
@@ -62,7 +60,7 @@ export function Page({ contentHtml }: { contentHtml: string }) {
           <ChevronRight
             size={24}
             className={clsx('text-zinc-800 dark:text-zinc-50', {
-              'text-zinc-500 dark:text-zinc-600': page === pages,
+              'text-background dark:text-zinc-950': page === pages,
             })}
           />
         </div>

@@ -2,9 +2,9 @@
   "books": [
     {
       "id": 1,
-      "slug": "book-example",
-      "title": "Exemplo de livro",
-      "author": "ChatGPT"
+      "slug": "a-startup-enxuta",
+      "title": "A Startup Enxuta",
+      "author": "Eric Ries"
     }
   ]
 }
