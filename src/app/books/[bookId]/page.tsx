@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { remark } from 'remark';
 import html from 'remark-html';
-import bookList from '../../../../../books.json';
+import bookList from '../../../../books.json';
 
 async function getBookContent(fileName: string) {
   const filePath = path.join(process.cwd(), 'public/books', `${fileName}.md`);

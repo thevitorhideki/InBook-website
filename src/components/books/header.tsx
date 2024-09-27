@@ -22,13 +22,13 @@ export function Header({ variant, bookId, title }: HeaderProps) {
   return (
     <header className="flex items-center justify-between p-5">
       {variant === 'primary' && (
-        <a href="/home">
+        <a href="/">
           <ChevronLeft size={36} className="text-zinc-950 dark:text-zinc-50" />
         </a>
       )}
       {variant === 'secondary' && (
         <div className="flex w-full items-center justify-between">
-          <a href={`/home/books/${bookId}`}>
+          <a href={`/books/${bookId}`}>
             <X size={36} className="text-zinc-950 dark:text-zinc-50" />
           </a>
           <h1 className="text-xl font-semibold">{title}</h1>

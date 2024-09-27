@@ -101,7 +101,7 @@ export default function Page() {
 
   useEffect(() => {
     if (isSignedIn) {
-      redirect('/home');
+      redirect('/');
     }
   }, [isSignedIn]);
 
@@ -189,7 +189,7 @@ export default function Page() {
       });
 
       await setActive({ session: completeSignUp.createdSessionId });
-      router.push('/home');
+      router.push('/');
     } catch (error) {
       if (isClerkAPIResponseError(error)) setErrors(error.errors);
       console.error(JSON.stringify(error, null, 2));
@@ -202,7 +202,7 @@ export default function Page() {
     return signUp.authenticateWithRedirect({
       strategy: 'oauth_google',
       redirectUrl: '/sign-up/sso-callback',
-      redirectUrlComplete: '/home',
+      redirectUrlComplete: '/',
     });
   };
 

@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { remark } from 'remark';
 import html from 'remark-html';
-import { books } from '../../../../../../books.json';
+import { books } from '../../../../../books.json';
 
 async function getBookContent(fileName: string) {
   const filePath = path.join(process.cwd(), 'public/books', `${fileName}.md`);
