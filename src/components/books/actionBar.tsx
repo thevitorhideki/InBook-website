@@ -26,13 +26,13 @@ export function ActionBar({ bookId }: { bookId: number }) {
       {isLoaded && !isSignedIn && (
         <>
           <Link
-            href="/sign-in"
+            href="/sign-up"
             className="flex flex-1 items-center justify-center gap-2 rounded-md border-2 border-zinc-300 p-3 font-bold dark:border-zinc-800"
           >
             Cadastrar
           </Link>
           <Link
-            href="/sign-up"
+            href="/sign-in"
             className="flex flex-1 items-center justify-center gap-2 rounded-md border-2 bg-zinc-300 p-3 font-bold dark:bg-zinc-800"
           >
             Entrar

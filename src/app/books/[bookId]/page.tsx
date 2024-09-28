@@ -5,6 +5,7 @@ import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import bookList from '../../../../books.json';
+import { PlayAudio } from './playSinopse';
 
 export default async function BookPage({
   params,
@@ -28,13 +29,16 @@ export default async function BookPage({
 
       <div className="px-5 pb-20">
         <div className="flex flex-col gap-3">
-          <Image
-            src={`/books/${book.slug}/cover.jpg`}
-            alt="book"
-            width={208}
-            height={208}
-            className="self-center rounded-2xl"
-          />
+          <div className="relative mx-auto">
+            <Image
+              src={`/books/${book.slug}/cover.jpg`}
+              alt="book"
+              width={208}
+              height={208}
+              className="self-center rounded-2xl"
+            />
+            <PlayAudio slug={book.slug} />
+          </div>
 
           <div className="flex flex-1 flex-col items-center gap-2">
             <h1 className="text-center text-2xl font-semibold">{book.title}</h1>
