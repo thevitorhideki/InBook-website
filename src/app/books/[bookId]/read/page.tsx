@@ -1,18 +1,7 @@
 import { Header } from '@/components/books/header';
 import { Page } from '@/components/books/page';
-import fs from 'fs';
-import path from 'path';
-import { remark } from 'remark';
-import html from 'remark-html';
+import { getBookContent } from '@/utils/getBookContent';
 import { books } from '../../../../../books.json';
-
-async function getBookContent(fileName: string) {
-  const filePath = path.join(process.cwd(), 'public/books', `${fileName}.md`);
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-
-  const processedContent = await remark().use(html).process(fileContents);
-  return processedContent.toString();
-}
 
 export default async function ReadBook({
   params,

@@ -1,21 +1,10 @@
 import { ActionBar } from '@/components/books/actionBar';
 import { Header } from '@/components/books/header';
-import fs from 'fs';
+import { getBookContent } from '@/utils/getBookContent';
 import Image from 'next/image';
-import path from 'path';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
-import { remark } from 'remark';
-import html from 'remark-html';
 import bookList from '../../../../books.json';
-
-async function getBookContent(fileName: string) {
-  const filePath = path.join(process.cwd(), 'public/books', `${fileName}.md`);
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-
-  const processedContent = await remark().use(html).process(fileContents);
-  return processedContent.toString();
-}
 
 export default async function BookPage({
   params,
@@ -40,7 +29,7 @@ export default async function BookPage({
       <div className="px-5 pb-20">
         <div className="flex flex-col gap-3">
           <Image
-            src={`/books/${book.slug}.jpg`}
+            src={`/books/${book.slug}/cover.jpg`}
             alt="book"
             width={208}
             height={208}
