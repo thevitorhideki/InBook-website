@@ -1,7 +1,8 @@
 import { Header } from '@/components/books/header';
 import { Page } from '@/components/books/page';
 import { getBookContent } from '@/utils/getBookContent';
-import { books } from '../../../../../../books.json';
+import { books } from '../../../../../books.json';
+import { PlayAudio } from './playAudiobook';
 
 export default async function ReadBook({
   params,
@@ -26,6 +27,7 @@ export default async function ReadBook({
       />
 
       <Page contentHtml={contentHtml} />
+      <PlayAudio slug={book.slug} />
     </div>
   );
 }

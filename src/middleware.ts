@@ -1,6 +1,11 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-export default clerkMiddleware();
+const isProtectedRoute = createRouteMatcher(['/books/(.*)/read']);
+
+export default clerkMiddleware((auth, req) => {
+  if (isProtectedRoute(req))
+    auth().protect({ unauthenticatedUrl: `${new URL('/sign-up', req.url)}` });
+});
 
 export const config = {
   matcher: [

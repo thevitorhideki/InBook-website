@@ -37,8 +37,8 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { redirect, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -108,12 +108,6 @@ export default function Page() {
       password: '',
     },
   });
-
-  useEffect(() => {
-    if (isSignedIn) {
-      redirect('/home');
-    }
-  }, [isSignedIn]);
 
   if (!signIn) return null;
 
@@ -193,7 +187,7 @@ export default function Page() {
       if (signInAttempt.status === 'complete') {
         await setActive({ session: signInAttempt.createdSessionId });
 
-        router.push('/home');
+        router.push('/');
       } else {
         console.error(signInAttempt);
       }
@@ -221,7 +215,7 @@ export default function Page() {
       if (signInAttempt.status === 'complete') {
         await setActive({ session: signInAttempt.createdSessionId });
 
-        router.push('/home');
+        router.push('/');
       } else {
         console.error(signInAttempt);
       }
@@ -248,7 +242,7 @@ export default function Page() {
     return signIn.authenticateWithRedirect({
       strategy: 'oauth_google',
       redirectUrl: '/sign-in/sso-callback',
-      redirectUrlComplete: '/home',
+      redirectUrlComplete: '/',
     });
   };
 
