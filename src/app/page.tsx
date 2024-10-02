@@ -3,12 +3,14 @@ import Header from '@/components/ui/header';
 
 export default function Index() {
   return (
-    <div className="px-5">
+    <div className="mx-auto max-w-screen-xl px-4">
       <Header />
 
-      <section className="flex flex-col gap-3">
-        <BookCollection />
-      </section>
+      <main>
+        <section className="flex flex-col gap-3">
+          <BookCollection />
+        </section>
+      </main>
     </div>
   );
 }

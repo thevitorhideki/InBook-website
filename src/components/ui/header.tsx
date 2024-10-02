@@ -1,9 +1,8 @@
 'use client';
 
-import { useClerk, useUser } from '@clerk/nextjs';
-import { ArrowRight, Moon, Sun } from 'lucide-react';
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { ArrowLeft, ArrowRight, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from './button';
 import {
@@ -13,22 +12,35 @@ import {
   DropdownMenuTrigger,
 } from './dropdown-menu';
 
-export default function Header() {
-  const { setTheme } = useTheme();
-  const { isLoaded, user, isSignedIn } = useUser();
-  const { signOut } = useClerk();
+type HeaderProps = {
+  bookId?: number;
+  title?: string;
+};
 
-  if (!isLoaded) {
-    return <div className="py-[36px]"></div>;
-  }
+export default function Header({ bookId, title }: HeaderProps) {
+  const { setTheme } = useTheme();
 
   return (
     <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 flex items-center justify-between py-4 backdrop-blur">
-      <h1 className="text-2xl font-bold">
-        Olá, {user?.firstName ? user?.firstName : 'bem-vindo'}
-      </h1>
+      <div className="w-1/4">
+        <Button variant={'ghost'} asChild>
+          {bookId ? (
+            <Link href={`/books/${bookId}`}>
+              <ArrowLeft width={24} />
+            </Link>
+          ) : (
+            <Link href="/">
+              <p className="text-2xl font-semibold">InBook</p>
+            </Link>
+          )}
+        </Button>
+      </div>
 
-      <div className="flex gap-3">
+      {bookId && (
+        <h1 className="w-1/2 text-center text-xl font-semibold">{title}</h1>
+      )}
+
+      <div className="mr-4 flex w-1/4 justify-end gap-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
@@ -50,25 +62,23 @@ export default function Header() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {(isSignedIn && (
-          <button onClick={() => signOut({ redirectUrl: '/' })}>
-            <Image
-              className="rounded-full"
-              src={user.imageUrl}
-              alt="Perfil"
-              width={36}
-              height={36}
-            />
-          </button>
-        )) || (
-          <div className="flex flex-1 justify-center">
-            <Button asChild variant={'outline'}>
-              <Link href="sign-in" className="flex items-center gap-1">
-                Entrar
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
+        {!bookId && (
+          <>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+
+            <SignedOut>
+              <div className="flex flex-1 justify-center">
+                <Button asChild variant={'outline'}>
+                  <Link href="/sign-in" className="flex items-center gap-1">
+                    Entrar
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </SignedOut>
+          </>
         )}
       </div>
     </header>
