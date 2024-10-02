@@ -247,13 +247,14 @@ export default function Page() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen md:p-4">
       <div className="relative hidden h-full w-1/2 md:block">
         <Image
           src="/assets/library.jpg"
           alt="Imagem de uma biblioteca"
           fill
           style={{ objectFit: 'cover' }}
+          className="rounded-3xl"
         />
       </div>
 
@@ -280,7 +281,7 @@ export default function Page() {
               <div className="text-center">
                 <h1 className="text-2xl font-semibold">Bem vindo de volta!</h1>
                 <p className="text-sm text-muted-foreground">
-                  Escreva o seu email entrar
+                  Escreva o seu email para entrar
                 </p>
               </div>
 

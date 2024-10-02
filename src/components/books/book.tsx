@@ -14,7 +14,7 @@ export function Book({ id, title, slug, author }: BookProps) {
         src={`/books/${slug}/cover.jpg`}
         alt="Livro"
         width={172}
-        height={172}
+        height={250}
         className="rounded-2xl"
       />
 

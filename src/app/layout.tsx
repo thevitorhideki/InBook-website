@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <ClerkProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <main>{children}</main>
           </ThemeProvider>
         </ClerkProvider>
       </body>

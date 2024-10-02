@@ -1,5 +1,5 @@
 import { ActionBar } from '@/components/books/actionBar';
-import { Header } from '@/components/books/header';
+import Header from '@/components/ui/header';
 import { getBookContent } from '@/utils/getBookContent';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
@@ -24,10 +24,10 @@ export default async function BookPage({
   const sinopse = contentHtml.split(/<h2>/)[0].split(/<\/h1>/)[1];
 
   return (
-    <>
-      <Header variant="primary" />
+    <div className="mx-auto max-w-screen-xl px-4">
+      <Header />
 
-      <div className="px-5 pb-20">
+      <div className="mx-auto max-w-screen-md pb-20">
         <div className="flex flex-col gap-3">
           <div className="relative mx-auto">
             <Image
@@ -49,12 +49,12 @@ export default async function BookPage({
         <div className="flex flex-col py-5">
           <p className="text-xl font-semibold">Sinopse</p>
 
-          <div className="flex flex-col gap-3 text-justify font-serif text-lg">
+          <div className="flex flex-col gap-3 font-serif text-lg">
             <ReactMarkdown rehypePlugins={[rehypeRaw]}>{sinopse}</ReactMarkdown>
           </div>
         </div>
       </div>
       <ActionBar bookId={parseInt(params.bookId)} />
-    </>
+    </div>
   );
 }
