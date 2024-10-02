@@ -1,6 +1,7 @@
 'use client';
 
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import clsx from 'clsx';
 import { ArrowLeft, ArrowRight, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
@@ -40,7 +41,11 @@ export default function Header({ bookId, title }: HeaderProps) {
         <h1 className="w-1/2 text-center text-xl font-semibold">{title}</h1>
       )}
 
-      <div className="mr-4 flex w-1/4 justify-end gap-3">
+      <div
+        className={clsx('mr-4 flex w-1/4 justify-end gap-3', {
+          'w-auto': !bookId,
+        })}
+      >
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
@@ -69,14 +74,12 @@ export default function Header({ bookId, title }: HeaderProps) {
             </SignedIn>
 
             <SignedOut>
-              <div className="flex flex-1 justify-center">
-                <Button asChild variant={'outline'}>
-                  <Link href="/sign-in" className="flex items-center gap-1">
-                    Entrar
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
+              <Button asChild variant={'ghost'}>
+                <Link href="/sign-in" className="flex items-center gap-1">
+                  Entrar
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
             </SignedOut>
           </>
         )}
