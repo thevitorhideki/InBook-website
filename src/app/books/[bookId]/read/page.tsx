@@ -1,5 +1,5 @@
-import { Header } from '@/components/books/header';
-import { Page } from '@/components/books/page';
+import { BookPage } from '@/components/books/bookPage';
+import Header from '@/components/ui/header';
 import { getBookContent } from '@/utils/getBookContent';
 import { books } from '../../../../../books.json';
 import { PlayAudio } from './playAudiobook';
@@ -19,14 +19,12 @@ export default async function ReadBook({
   const contentHtml = await getBookContent(book.slug);
 
   return (
-    <div className="flex h-screen flex-col">
-      <Header
-        variant="secondary"
-        bookId={parseInt(bookId)}
-        title={book.title}
-      />
+    <div className="mx-auto flex h-screen max-w-screen-xl flex-col">
+      <div className="px-4">
+        <Header bookId={parseInt(bookId)} title={book.title} />
+      </div>
 
-      <Page contentHtml={contentHtml} />
+      <BookPage contentHtml={contentHtml} />
       <PlayAudio slug={book.slug} />
     </div>
   );

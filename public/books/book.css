@@ -1,5 +1,4 @@
 h2 {
-  margin-top: 1rem;
   font-size: 1.75rem;
   font-weight: 600;
   text-align: left;
@@ -10,7 +9,8 @@ h3 {
   font-weight: 500;
 }
 
-ul, ol {
+ul,
+ol {
   margin-left: 20px;
 }
 
@@ -22,10 +22,6 @@ li {
   list-style-type: disc;
 }
 
-a {
-  text-decoration: underline;
-}
-
 img {
   margin: 0 auto;
 }
@@ -35,17 +31,8 @@ blockquote {
   border-radius: 8px;
 }
 
-.dark a {
-  color: violet;
-  text-decoration: underline;
-}
-
 .dark blockquote {
   background-color: #18181b;
-}
-
-.light a {
-  color: blueviolet;
 }
 
 .light blockquote {

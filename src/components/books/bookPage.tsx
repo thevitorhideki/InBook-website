@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import '../../../public/books/book.css';
 
-export function Page({ contentHtml }: { contentHtml: string }) {
+export function BookPage({ contentHtml }: { contentHtml: string }) {
   const [page, setPage] = useState(1);
   const [chapter, setChapter] = useState('');
 
@@ -42,10 +42,11 @@ export function Page({ contentHtml }: { contentHtml: string }) {
   }, [page, contentHtml]);
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-5 rounded-t-xl border-t-2 border-zinc-800 p-5">
-      <div className="flex flex-col gap-3 text-justify font-serif text-lg">
+    <div className="mx-auto flex max-w-screen-md flex-1 flex-col justify-between gap-5 rounded-t-xl p-5">
+      <div className="flex flex-col gap-3 font-serif text-lg">
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>{chapter}</ReactMarkdown>
       </div>
+
       <div className="mx-auto flex items-center gap-3">
         <div onClick={prevPage}>
           <ChevronLeft
