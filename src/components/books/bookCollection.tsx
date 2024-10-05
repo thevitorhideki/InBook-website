@@ -1,11 +1,9 @@
-'use client';
-
+import { prisma } from '@/lib/prisma';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
-import bookList from '../../../books.json';
 import { Book } from './book';
 
-export function BookCollection() {
-  const { books } = bookList;
+export async function BookCollection() {
+  const books = await prisma.book.findMany();
 
   return (
     <div className="flex flex-col gap-2">

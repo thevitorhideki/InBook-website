@@ -9,12 +9,12 @@ type BookProps = {
 
 export function Book({ id, title, slug, author }: BookProps) {
   return (
-    <a href={`/books/${id}`} className="mr-5 max-w-48">
+    <a href={`/books/${id}`} className="mr-5 max-w-44">
       <Image
         src={`/books/${slug}/cover.jpg`}
         alt="Livro"
-        width={172}
-        height={250}
+        width={687}
+        height={1000}
         className="rounded-2xl"
       />
 
