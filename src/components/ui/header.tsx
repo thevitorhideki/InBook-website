@@ -14,19 +14,19 @@ import {
 } from './dropdown-menu';
 
 type HeaderProps = {
-  bookId?: number;
+  slug?: string;
   title?: string;
 };
 
-export default function Header({ bookId, title }: HeaderProps) {
+export default function Header({ slug, title }: HeaderProps) {
   const { setTheme } = useTheme();
 
   return (
     <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 flex items-center justify-between py-4 backdrop-blur">
       <div className="w-1/4">
         <Button variant={'ghost'} asChild>
-          {bookId ? (
-            <Link href={`/books/${bookId}`}>
+          {slug ? (
+            <Link href={`/books/${slug}`}>
               <ArrowLeft width={24} />
             </Link>
           ) : (
@@ -37,13 +37,13 @@ export default function Header({ bookId, title }: HeaderProps) {
         </Button>
       </div>
 
-      {bookId && (
+      {slug && (
         <h1 className="w-1/2 text-center text-xl font-semibold">{title}</h1>
       )}
 
       <div
         className={clsx('mr-4 flex w-1/4 justify-end gap-3', {
-          'w-auto': !bookId,
+          'w-auto': !slug,
         })}
       >
         <DropdownMenu>
@@ -67,7 +67,7 @@ export default function Header({ bookId, title }: HeaderProps) {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {!bookId && (
+        {!slug && (
           <>
             <SignedIn>
               <UserButton />

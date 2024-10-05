@@ -1,20 +1,16 @@
 import { BookPage } from '@/components/books/bookPage';
 import Header from '@/components/ui/header';
 import { getBookContent } from '@/lib/markdown';
-import { prisma } from '@/lib/prisma';
+import { booksServer } from '@/server/books';
 import { PlayAudio } from './playAudiobook';
 
 export default async function ReadBook({
   params,
 }: {
-  params: { bookId: string };
+  params: { slug: string };
 }) {
-  const { bookId } = params;
-  const book = await prisma.book.findUnique({
-    where: {
-      id: parseInt(bookId),
-    },
-  });
+  const { slug } = params;
+  const book = await booksServer.getBookBySlug(slug);
 
   if (!book) {
     return null;
@@ -25,7 +21,7 @@ export default async function ReadBook({
   return (
     <div className="mx-auto flex h-screen max-w-screen-xl flex-col">
       <div className="px-4">
-        <Header bookId={parseInt(bookId)} title={book.title} />
+        <Header slug={slug} title={book.title} />
       </div>
 
       <BookPage contentHtml={contentHtml} />

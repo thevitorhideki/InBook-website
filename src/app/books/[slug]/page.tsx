@@ -1,7 +1,7 @@
 import { ActionBar } from '@/components/books/actionBar';
 import Header from '@/components/ui/header';
 import { getBookContent } from '@/lib/markdown';
-import { prisma } from '@/lib/prisma';
+import { booksServer } from '@/server/books';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
@@ -9,18 +9,14 @@ import { PlayAudio } from './playSinopse';
 
 type BookPageProps = {
   params: {
-    bookId: string;
+    slug: string;
   };
 };
 
 export default async function BookPage({ params }: BookPageProps) {
-  const { bookId } = params;
+  const { slug } = params;
 
-  const book = await prisma.book.findUnique({
-    where: {
-      id: parseInt(bookId),
-    },
-  });
+  const book = await booksServer.getBookBySlug(slug);
 
   if (!book) {
     return null;
@@ -48,7 +44,7 @@ export default async function BookPage({ params }: BookPageProps) {
 
           <div className="flex flex-1 flex-col items-center gap-2">
             <h1 className="text-center text-2xl font-semibold">{book.title}</h1>
-            <p className="fontlight text-base">{book.author}</p>
+            <p className="fontlight text-base">{book.author.name}</p>
           </div>
         </div>
 
@@ -60,7 +56,7 @@ export default async function BookPage({ params }: BookPageProps) {
           </div>
         </div>
       </div>
-      <ActionBar bookId={parseInt(params.bookId)} />
+      <ActionBar slug={slug} />
     </div>
   );
 }

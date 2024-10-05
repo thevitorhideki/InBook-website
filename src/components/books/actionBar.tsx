@@ -4,7 +4,7 @@ import { useUser } from '@clerk/nextjs';
 import { BookIcon, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
-export function ActionBar({ bookId }: { bookId: number }) {
+export function ActionBar({ slug }: { slug: string }) {
   const { isSignedIn, isLoaded } = useUser();
 
   return (
@@ -16,7 +16,7 @@ export function ActionBar({ bookId }: { bookId: number }) {
       )}
       {isLoaded && isSignedIn && (
         <a
-          href={isSignedIn ? `/books/${bookId}/read` : '/sign-up'}
+          href={isSignedIn ? `/books/${slug}/read` : '/sign-up'}
           className="flex flex-1 items-center justify-center gap-2 rounded-md bg-zinc-300 p-3 dark:bg-zinc-800"
         >
           <BookIcon size={24} />
