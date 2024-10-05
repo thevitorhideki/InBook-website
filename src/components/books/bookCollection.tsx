@@ -1,9 +1,13 @@
-import { prisma } from '@/lib/prisma';
+import { booksServer } from '@/server/books';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { Book } from './book';
 
 export async function BookCollection() {
-  const books = await prisma.book.findMany();
+  const books = await booksServer.getAllBooks();
+
+  if (!books) {
+    return;
+  }
 
   return (
     <div className="flex flex-col gap-2">
@@ -19,7 +23,7 @@ export async function BookCollection() {
               id={book.id}
               title={book.title}
               slug={book.slug}
-              author={book.author}
+              author={book.author.name}
             />
           ))}
         </div>

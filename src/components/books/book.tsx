@@ -1,15 +1,15 @@
 import Image from 'next/image';
 
 type BookProps = {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   author: string;
 };
 
-export function Book({ id, title, slug, author }: BookProps) {
+export function Book({ title, slug, author }: BookProps) {
   return (
-    <a href={`/books/${id}`} className="mr-5 max-w-44">
+    <a href={`/books/${slug}`} className="mr-5 max-w-44">
       <Image
         src={`/books/${slug}/cover.jpg`}
         alt="Livro"
