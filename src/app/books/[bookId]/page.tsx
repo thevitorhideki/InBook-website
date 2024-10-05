@@ -1,27 +1,33 @@
 import { ActionBar } from '@/components/books/actionBar';
 import Header from '@/components/ui/header';
-import { getBookContent } from '@/utils/getBookContent';
+import { getBookContent } from '@/lib/markdown';
+import { prisma } from '@/lib/prisma';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
-import bookList from '../../../../books.json';
 import { PlayAudio } from './playSinopse';
 
-export default async function BookPage({
-  params,
-}: {
-  params: { bookId: string };
-}) {
+type BookPageProps = {
+  params: {
+    bookId: string;
+  };
+};
+
+export default async function BookPage({ params }: BookPageProps) {
   const { bookId } = params;
 
-  const book = bookList.books.filter((book) => book.id === parseInt(bookId))[0];
+  const book = await prisma.book.findUnique({
+    where: {
+      id: parseInt(bookId),
+    },
+  });
 
   if (!book) {
     return null;
   }
 
-  const contentHtml = await getBookContent(book.slug);
-  const sinopse = contentHtml.split(/<h2>/)[0].split(/<\/h1>/)[1];
+  const bookDetails = await getBookContent(book.slug);
+  const sinopse = bookDetails.sinopse;
 
   return (
     <div className="mx-auto max-w-screen-xl px-4">
@@ -29,12 +35,12 @@ export default async function BookPage({
 
       <div className="mx-auto max-w-screen-md pb-20">
         <div className="flex flex-col gap-3">
-          <div className="relative mx-auto">
+          <div className="relative mx-auto max-w-52">
             <Image
               src={`/books/${book.slug}/cover.jpg`}
               alt="book"
-              width={208}
-              height={208}
+              width={687}
+              height={1000}
               className="self-center rounded-2xl"
             />
             <PlayAudio slug={book.slug} />

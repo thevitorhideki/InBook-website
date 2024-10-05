@@ -1,6 +1,9 @@
-# Introdução
+---
+date: "2024-10-05"
+title: "A Startup Enxuta"
+sinopse: Eric Ries apresenta o conceito de **startup enxuta** (Lean Startup), uma metodologia para criar negócios sustentáveis através da inovação contínua e redução de desperdícios. A ideia é adaptar práticas de manufatura enxuta da Toyota para o ambiente empreendedor, aplicando-as no desenvolvimento de produtos e serviços. A startup enxuta visa acelerar o ciclo de feedback por meio do processo **Construir-Medir-Aprender**, utilizando produtos mínimos viáveis (MVPs) para testar suposições e aprender rapidamente se o caminho escolhido é viável ou se a empresa deve "pivotar" e mudar de direção.
+---
 
-Eric Ries apresenta o conceito de **startup enxuta** (Lean Startup), uma metodologia para criar negócios sustentáveis através da inovação contínua e redução de desperdícios. A ideia é adaptar práticas de manufatura enxuta da Toyota para o ambiente empreendedor, aplicando-as no desenvolvimento de produtos e serviços. A startup enxuta visa acelerar o ciclo de feedback por meio do processo **Construir-Medir-Aprender**, utilizando produtos mínimos viáveis (MVPs) para testar suposições e aprender rapidamente se o caminho escolhido é viável ou se a empresa deve "pivotar" e mudar de direção.
 
 ## Capítulo 1: Começar
 
