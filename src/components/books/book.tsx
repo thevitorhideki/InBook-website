@@ -1,13 +1,9 @@
+import { BookProps } from '@/server/types';
 import Image from 'next/image';
 
-type BookProps = {
-  id: string;
-  title: string;
-  slug: string;
-  author: string;
-};
+export function Book({ title, slug, authors }: BookProps) {
+  const authorsList = authors.map((author) => author.name).join(', ');
 
-export function Book({ title, slug, author }: BookProps) {
   return (
     <a href={`/books/${slug}`} className="mr-5 max-w-44">
       <Image
@@ -20,7 +16,7 @@ export function Book({ title, slug, author }: BookProps) {
 
       <div className="py-1">
         <h1 className="text-md font-semibold">{title}</h1>
-        <p className="text-sm font-light">{author}</p>
+        <p className="text-sm font-light">{authorsList}</p>
       </div>
     </a>
   );
