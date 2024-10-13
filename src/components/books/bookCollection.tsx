@@ -23,7 +23,9 @@ export async function BookCollection() {
               id={book.id}
               title={book.title}
               slug={book.slug}
-              author={book.author.name}
+              authors={book.authors}
+              createdAt={book.createdAt}
+              updatedAt={book.updatedAt}
             />
           ))}
         </div>

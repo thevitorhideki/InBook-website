@@ -16,16 +16,16 @@ export default async function ReadBook({
     return null;
   }
 
-  const contentHtml = (await getBookContent(book.slug)).contentHtml;
+  const contentHtml = (await getBookContent(book[0].slug)).contentHtml;
 
   return (
     <div className="mx-auto flex h-screen max-w-screen-xl flex-col">
       <div className="px-4">
-        <Header slug={slug} title={book.title} />
+        <Header slug={slug} title={book[0].title} />
       </div>
 
       <BookPage contentHtml={contentHtml} />
-      <PlayAudio slug={book.slug} />
+      <PlayAudio slug={book[0].slug} />
     </div>
   );
 }
